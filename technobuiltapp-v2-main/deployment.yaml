@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-eastus1-dev-technobuilt-v2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: react-app
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      containers:
+        - name: webapp-eastus1-dev-technobuiltapp-conatiner
+          image: acreastusdevtechnobuilt.azurecr.io/app-v2:4
+      imagePullSecrets:
+        - name: acr-secret
+          ports:
+            - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-eastus1-dev-technobuiltv2
+spec:
+  selector:
+    app: react-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
